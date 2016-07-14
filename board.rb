@@ -30,15 +30,11 @@ class Board
   end
 
   def seed_bombs(bomb_count = nil, safe_pos = nil)
-    bomb_count = tile_count / 4 if bomb_count.nil?
-    safe_count = tile_count - bomb_count
-
     safe_index = (safe_pos.first * @width) + safe_pos.last if safe_pos
-
     shuffled = []
+
     loop do
-      shuffled = generate_shuffled_bombs(bomb_count, safe_count)
-      #require 'byebug'; debugger
+      shuffled = generate_shuffled_bombs(bomb_count)
       break if safe_pos.nil?
       break unless shuffled[safe_index]
     end
@@ -53,7 +49,10 @@ class Board
     end
   end
 
-  def generate_shuffled_bombs(bomb_count, safe_count)
+  def generate_shuffled_bombs(bomb_count)
+    bomb_count = tile_count / 4 if bomb_count.nil?
+    safe_count = tile_count - bomb_count
+
     bombs = Array.new(bomb_count, true)
     not_bombs = Array.new(safe_count, false)
 

@@ -57,7 +57,7 @@ class Game
 
   def reveal(pos)
     unless @seeded
-      @board.seed_bombs(pos)
+      @board.seed_bombs(pos, 4, true)
       @seeded = true
     end
 

@@ -26,7 +26,7 @@ class Player
     end
   end
 
-  def getc
+  def grab
     STDIN.echo = false
     STDIN.raw!
 
@@ -40,6 +40,25 @@ class Player
     STDIN.cooked!
 
     return input
+  end
+
+  def getc
+    input = grab
+
+    case input
+    when "\e[A"
+      input = "UP"
+    when "\e[B"
+      input = "DOWN"
+    when "\e[D"
+      input = "LEFT"
+    when "\e[C"
+      input = "RIGHT"
+    when "\u0003"
+      exit
+    end
+
+    input
   end
 end
 

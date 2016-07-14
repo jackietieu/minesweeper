@@ -2,7 +2,7 @@ require_relative "tile"
 
 class Board
 
-  def initialize(width = 4, height = 4)
+  def initialize(width = 10, height = 10)
     @width = width
     @height = height
     @grid = empty_grid
@@ -24,8 +24,18 @@ class Board
   end
 
   def reveal(pos)
+    return if self[pos].revealed
     bomb_count = nearby_bombs(pos)
     self[pos].reveal(bomb_count)
+
+    reveal_neighbors(pos) if bomb_count == 0
+  end
+
+  def reveal_neighbors(pos)
+    neighbors = neighboring_pos(pos)
+    neighbors.each do |pos|
+      reveal(pos)
+    end
   end
 
   def render
@@ -68,21 +78,24 @@ class Board
     (bombs + not_bombs).shuffle
   end
 
-  def neighboring_tiles(pos)
+  def neighboring_pos(pos)
     x, y = pos
     xs = [x - 1, x, x + 1]
     ys = [y - 1, y, y + 1]
 
     neighbors = xs.product(ys)
     neighbors.reject! { |neighbor| neighbor == pos }
-    neighbors.select! do |pos|
+    neighbors.select do |pos|
       x, y = pos
       in_width = (0...@width).to_a.include?(x)
       in_height = (0...@height).to_a.include?(y)
 
       in_width && in_height
     end
+  end
 
+  def neighboring_tiles(pos)
+    neighbors = neighboring_pos(pos)
     neighbors.map { |pos| self[pos] }
   end
 
@@ -110,14 +123,14 @@ class Board
   def reveal_all
     (0...@width).each do |x|
       (0...@height).each do |y|
-        reveal([x, y])
+        reveal([x, y]) unless @grid[x][y].revealed
       end
     end
   end
 end
 
 if $PROGRAM_NAME == __FILE__
-  b = Board.new(4, 4)
+  b = Board.new(10, 10)
   b.seed_bombs([2,2], 4)
   b.render
   b.neighboring_tiles([3,3])

@@ -2,6 +2,7 @@ require 'colorize'
 
 class Tile
   attr_writer :nearby_bombs
+  attr_reader :bomb
 
   def initialize
     @bomb, @flagged, @revealed, @selected = false
@@ -12,10 +13,10 @@ class Tile
     @bomb = true
   end
 
-  def reveal
+  def reveal(bombs)
+    @nearby_bombs = bombs
     @revealed = true
     @flagged = false
-    @bomb
   end
 
   def toggle_flag

@@ -67,10 +67,30 @@ class Board
     (bombs + not_bombs).shuffle
   end
 
+  def neighboring_tiles(pos)
+    x, y = pos
+    xs = [x - 1, x, x + 1]
+    ys = [y - 1, y, y + 1]
+
+    neighbors = xs.product(ys)
+    neighbors.reject! { |neighbor| neighbor == pos }
+    neighbors.select! do |pos|
+      x, y = pos
+      in_width = (0...@width).to_a.include?(x)
+      in_height = (0...@height).to_a.include?(y)
+
+      in_width && in_height
+    end
+
+    neighbors.map { |pos| self[pos] }
+  end
+
+  
 end
 
 if $PROGRAM_NAME == __FILE__
   b = Board.new(4, 4)
-  b.seed_bombs(4, [2,2])
+  b.seed_bombs([2,2], 4)
   b.render
+  b.neighboring_tiles([3,3])
 end

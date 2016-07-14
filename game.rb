@@ -9,8 +9,6 @@ class Game
   end
 
   def play
-
-
     take_turn until game_over?
   end
 
@@ -55,7 +53,7 @@ class Game
       @board.seed_bombs(pos)
       @seeded = true
     end
-    
+
     @board.reveal(pos)
   end
 end

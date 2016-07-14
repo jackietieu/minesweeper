@@ -29,24 +29,41 @@ class Board
     @width * @height
   end
 
-  def seed_bombs(bomb_count = tile_count / 4)
+  def seed_bombs(bomb_count = nil, safe_pos = nil)
+    bomb_count = tile_count / 4 if bomb_count.nil?
     safe_count = tile_count - bomb_count
 
-    bombs = Array.new(bomb_count, true)
-    not_bombs = Array.new(safe_count, false)
+    safe_index = (safe_pos.first * @width) + safe_pos.last if safe_pos
 
-    shuffled = (bombs + not_bombs).shuffle
-    shuffled.each_with_index do |is_bomb, i|
+    shuffled = []
+    loop do
+      shuffled = generate_shuffled_bombs(bomb_count, safe_count)
+      #require 'byebug'; debugger
+      break if safe_pos.nil?
+      break unless shuffled[safe_index]
+    end
+
+    apply_bombs(shuffled)
+  end
+
+  def apply_bombs(bomb_array)
+    bomb_array.each_with_index do |is_bomb, i|
       tile = @grid[i / @width][i % @width]
       tile.make_bomb if is_bomb
     end
   end
 
+  def generate_shuffled_bombs(bomb_count, safe_count)
+    bombs = Array.new(bomb_count, true)
+    not_bombs = Array.new(safe_count, false)
+
+    (bombs + not_bombs).shuffle
+  end
 
 end
 
 if $PROGRAM_NAME == __FILE__
   b = Board.new(4, 4)
-  b.seed_bombs
+  b.seed_bombs(4, [2,2])
   b.render
 end

@@ -3,11 +3,14 @@ require_relative "player"
 
 class Game
   def initialize
+    @seeded = false
     @board = Board.new
     @player = Player.new
   end
 
   def play
+
+
     take_turn until game_over?
   end
 
@@ -37,12 +40,26 @@ class Game
       when :select
         # impliment with getc
       when :flag
-        @board.toggle_flag(pos)
+        flag(pos)
       when :reveal
-        @board.reveal(pos)
+        reveal(pos)
     end
   end
+
+  def flag(pos)
+    @board.toggle_flag(pos)
+  end
+
+  def reveal(pos)
+    unless @seeded
+      @board.seed_bombs(pos)
+      @seeded = true
+    end
+    
+    @board.reveal(pos)
+  end
 end
+
 
 if $PROGRAM_NAME == __FILE__
   g = Game.new

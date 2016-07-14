@@ -37,7 +37,7 @@ class Board
     @width * @height
   end
 
-  def seed_bombs(bomb_count = nil, safe_pos = nil)
+  def seed_bombs(safe_pos = nil, bomb_count = nil)
     safe_index = (safe_pos.first * @width) + safe_pos.last if safe_pos
     shuffled = []
 

@@ -2,7 +2,7 @@ require 'colorize'
 
 class Tile
   attr_writer :nearby_bombs
-  attr_reader :bomb
+  attr_reader :bomb, :revealed
 
   def initialize
     @bomb, @flagged, @revealed, @selected = false
@@ -46,9 +46,10 @@ class Tile
   end
 
   def marker
-    return "[*]" if @bomb
+    # return "[*]" if @bomb
     return "[F]" if @flagged
     return "[ ]" if !@revealed
+    return " * " if @bomb
     return "   " if @nearby_bombs == 0
     return " #{@nearby_bombs} "
   end

@@ -24,7 +24,8 @@ class Board
   end
 
   def reveal(pos)
-    self[pos].reveal
+    bomb_count = nearby_bombs(pos)
+    self[pos].reveal(bomb_count)
   end
 
   def render
@@ -85,7 +86,34 @@ class Board
     neighbors.map { |pos| self[pos] }
   end
 
-  
+  def nearby_bombs(pos)
+    neighbors = neighboring_tiles(pos)
+
+    bomb_count = 0
+    neighbors.each do |neighbor|
+      bomb_count += 1 if neighbor.bomb
+    end
+    bomb_count
+  end
+
+  def all_tiles
+    @grid.flatten
+  end
+
+  def over?
+    all_tiles.each do |tile|
+      return true if tile.revealed && tile.bomb
+    end
+    false
+  end
+
+  def reveal_all
+    (0...@width).each do |x|
+      (0...@height).each do |y|
+        reveal([x, y])
+      end
+    end
+  end
 end
 
 if $PROGRAM_NAME == __FILE__

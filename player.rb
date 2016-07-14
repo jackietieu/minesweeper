@@ -19,6 +19,8 @@ class Player
 
     if input == 'f'
       return :flag
+    elsif input == 'db'
+      return :debug
     else
       return :reveal
     end

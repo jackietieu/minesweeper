@@ -1,3 +1,4 @@
+require 'byebug'
 require_relative "board"
 require_relative "player"
 
@@ -10,10 +11,14 @@ class Game
 
   def play
     take_turn until game_over?
+
+    @board.reveal_all
+    render
+    puts "Game over :("
   end
 
   def game_over?
-    false
+    @board.over?
   end
 
   def clear
@@ -35,6 +40,8 @@ class Game
     pos    = move.values.first
 
     case action
+      when :debug
+        debugger
       when :select
         # impliment with getc
       when :flag

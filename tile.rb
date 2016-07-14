@@ -18,7 +18,13 @@ class Tile
     @bomb
   end
 
+  def toggle_flag
+    return if @revealed
+    @flagged = !@flagged
+  end
+
   def flag
+    return if @revealed
     @flagged = true
   end
 

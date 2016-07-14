@@ -33,7 +33,14 @@ class Game
     action = move.keys.first
     pos    = move.values.first
 
-    
+    case action
+      when :select
+        # impliment with getc
+      when :flag
+        @board.toggle_flag(pos)
+      when :reveal
+        @board.reveal(pos)
+    end
   end
 end
 

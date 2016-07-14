@@ -14,13 +14,13 @@ class Player
   end
 
   def get_action
-    puts "[F]lag or [S]elect?"
+    puts "[F]lag or [R]eveal?"
     input = gets.chomp.downcase
 
     if input == 'f'
       return :flag
     else
-      return :select
+      return :reveal
     end
   end
 

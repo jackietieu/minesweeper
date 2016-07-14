@@ -19,6 +19,14 @@ class Board
     @grid[x][y]
   end
 
+  def toggle_flag(pos)
+    self[pos].toggle_flag
+  end
+
+  def reveal(pos)
+    self[pos].reveal
+  end
+
   def render
     @grid.each do |row|
       puts row.each { |tile| tile.to_s }.join

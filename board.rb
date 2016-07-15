@@ -42,7 +42,15 @@ class Board
     @grid.each do |row|
       puts row.each { |tile| tile.to_s }.join
     end
+
+    @grid.map do |row|
+      row.map do |tile|
+        tile.value
+      end
+    end
   end
+
+
 
   def tile_count
     @width * @height
@@ -87,8 +95,8 @@ class Board
     neighbors.reject! { |neighbor| neighbor == pos }
     neighbors.select do |pos|
       x, y = pos
-      in_width = (0...@width).to_a.include?(x)
-      in_height = (0...@height).to_a.include?(y)
+      in_height = (0...@height).to_a.include?(x)
+      in_width = (0...@width).to_a.include?(y)
 
       in_width && in_height
     end
@@ -120,12 +128,25 @@ class Board
     false
   end
 
+  def won?
+    all_tiles.each do |tile|
+      return false if tile.revealed && tile.bomb
+      return false if !tile.bomb && !tile.revealed
+    end
+    true
+  end
+
   def reveal_all
-    (0...@width).each do |x|
-      (0...@height).each do |y|
+    (0...@height).each do |x|
+      (0...@width).each do |y|
         reveal([x, y]) unless @grid[x][y].revealed
       end
     end
+  end
+
+  def highlight(pos)
+    all_tiles.each { |tile| tile.deselect }
+    self[pos].select
   end
 end
 

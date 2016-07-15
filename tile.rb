@@ -50,12 +50,21 @@ class Tile
     return "[F]" if @flagged
     return "[ ]" if !@revealed
     return " * " if @bomb
-    return "   " if @nearby_bombs == 0
-    return " #{@nearby_bombs} "
+    return " #{@nearby_bombs} " if @nearby_bombs != 0
+    return " • " if @selected
+    return "   "
+
   end
 
   def to_s
     marker.colorize(color)
+  end
+
+  def value
+    return "F" if @flagged
+    return "#" if !@revealed
+    return "*" if @bomb
+    return @nearby_bombs.to_s
   end
 
   # private

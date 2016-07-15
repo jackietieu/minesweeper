@@ -1,29 +1,46 @@
 require "io/console"
 
 class Player
-  def get_move
-    pos = get_pos
-    action = get_action
 
-    { action => pos }
+  def initialize
+    @pos = [0,0]
   end
 
-  def get_pos
-    puts "Enter position"
-    gets.chomp.split(',').map(&:to_i)
+  def select_difficulty
+    puts "Select difficulty (0-4):"
+    gets.chomp.to_i
   end
 
-  def get_action
-    puts "[F]lag or [R]eveal?"
-    input = gets.chomp.downcase
+  def get_move(board)
+    x = board.first.length
+    y = board.length
 
-    if input == 'f'
-      return :flag
-    elsif input == 'db'
-      return :debug
-    else
-      return :reveal
+    input = getc
+    case input
+    when "UP"
+      action = :select
+      @pos[0] -= 1
+      @pos[0] %= y
+    when "DOWN"
+      action = :select
+      @pos[0] += 1
+      @pos[0] %= y
+    when "LEFT"
+      action = :select
+      @pos[1] -= 1
+      @pos[1] %= x
+    when "RIGHT"
+      action = :select
+      @pos[1] += 1
+      @pos[1] %= x
+    when "RETURN"
+      action = :reveal
+    when "F"
+      action = :flag
     end
+
+      #require 'byebug'; debugger
+    { action => @pos }
   end
 
   def grab
@@ -54,11 +71,13 @@ class Player
       input = "LEFT"
     when "\e[C"
       input = "RIGHT"
+    when "\r"
+      input = "RETURN"
     when "\u0003"
       exit
     end
 
-    input
+    input.upcase
   end
 end
 
